@@ -1,1 +1,1 @@
-include ':HockeyLogReportingHelper-Library'
+include ':hockeylogreportinghelper'

@@ -70,7 +70,7 @@ public class LogRecordingService extends IntentService {
                 // write the logs to file every {linesUntilFlush}. lines
                 if (++lineCount % linesUntilFlush == 0) {
                     // avoid OutOfMemoryErrors; flush now
-                    LogFileHelper.saveLog(getApplication(),stringBuilder);
+                    LogFileHelper.saveLog(getApplication(), stringBuilder);
                     stringBuilder.delete(0, stringBuilder.length()); // clear
                 }
             }

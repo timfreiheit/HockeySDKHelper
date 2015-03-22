@@ -5,4 +5,5 @@
         <service android:name=".LogRecordingService"/>
     </application>
 
+
 </manifest>

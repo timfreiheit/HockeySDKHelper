@@ -18,6 +18,6 @@ public class LogCrashManagerListener extends CrashManagerListener {
         if(LogRecordingManager.CONFIG != null){
             return LogFileHelper.readLastLogFile(LogRecordingManager.APPLICATION_INSTANCE, LogRecordingManager.CONFIG.maxLinesPerLog);
         }
-        return LogFileHelper.readLastLogFile(LogRecordingManager.APPLICATION_INSTANCE,1000);
+        return LogFileHelper.readLastLogFile(LogRecordingManager.APPLICATION_INSTANCE, 1000);
     }
 }
