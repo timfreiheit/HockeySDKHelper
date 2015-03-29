@@ -11,18 +11,18 @@ Create an custom Application and override the onCreate-Method
 
 ```java
 
-	@Override
-    public void onCreate() {
-        super.onCreate();
+@Override
+public void onCreate() {
+    super.onCreate();
 
-        LogRecordingConfig config = new LogRecordingConfig.Builder()
-                .setLogLevel(Log.VERBOSE)
-                .setMaxLines(1000)
-                .clearLogBeforeRecording(false)
-                .build();
-        LogRecordingManager.init(this, config);
+    LogRecordingConfig config = new LogRecordingConfig.Builder()
+            .setLogLevel(Log.VERBOSE)
+            .setMaxLines(1000)
+            .clearLogBeforeRecording(false)
+            .build();
+    LogRecordingManager.init(this, config);
 
- 	}
+}
 
 ```
 
@@ -32,14 +32,14 @@ just add the LogCrashManagerListener to the Hockey CrashManager
 
 
 ```java
-        CrashManager.register(this,"some hockey id", new LogCrashManagerListener());
+CrashManager.register(this,"some hockey id", new LogCrashManagerListener());
 ```
 
 The LogCrashManager also overrides shouldAutoUploadCrashes
 ```java
-    @Override
-    public boolean shouldAutoUploadCrashes() {
-        return true;
-    }
+@Override
+public boolean shouldAutoUploadCrashes() {
+    return true;
+}
 ```
 This is not a requirement and you can override it if you want
