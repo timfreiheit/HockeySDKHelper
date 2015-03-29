@@ -1,4 +1,4 @@
-package freiheit.hockeylogreportinghelper;
+package freiheit.hockey.log;
 
 import android.content.Context;
 
@@ -80,6 +80,9 @@ class LogFileHelper {
      * reads log from last app run
      */
     static String readLastLogFile(Context context, int maxLines) {
+        if(context == null){
+            return null;
+        }
         File oldLogFile = new File(context.getCacheDir(), LogRecordingManager.LOG_FILE_NAME_LAST_RUN);
 
         if (!oldLogFile.exists()) {

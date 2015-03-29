@@ -1,4 +1,4 @@
-package freiheit.hockeylogreportinghelper;
+package freiheit.hockey.log;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -137,6 +137,9 @@ public class LogLine {
 
     }
 
+    /**
+     * converts the loglevel char to the correct LogLevel int
+     */
     public static int convertCharToLogLevel(char logLevelChar) {
 
         switch (logLevelChar) {

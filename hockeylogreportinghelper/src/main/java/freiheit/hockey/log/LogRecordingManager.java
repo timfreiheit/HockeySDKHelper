@@ -1,4 +1,4 @@
-package freiheit.hockeylogreportinghelper;
+package freiheit.hockey.log;
 
 import android.app.Application;
 import android.content.Intent;
@@ -15,6 +15,10 @@ public class LogRecordingManager {
     static Application APPLICATION_INSTANCE;
     static LogRecordingConfig CONFIG;
 
+    /**
+     * init the log recording service
+     * must be called in {@link Application#onCreate()} to provide the best result
+     */
     public static void init(Application app, LogRecordingConfig config){
         if(APPLICATION_INSTANCE != null){
             return;

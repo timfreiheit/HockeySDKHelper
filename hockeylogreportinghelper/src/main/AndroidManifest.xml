@@ -1,8 +1,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="freiheit.hockeylogreportinghelper">
+    package="freiheit.hockey">
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
-        <service android:name=".LogRecordingService"/>
+
+        <!-- the actual service to record the logs -->
+        <service android:name="freiheit.hockey.log.LogRecordingService"/>
+
+        <!--
+            just some activity declaration for hockey app
+            avoid forgetting it on the project in which this library is used
+        -->
+        <activity android:name="net.hockeyapp.android.FeedbackActivity" />
+        <activity android:name="net.hockeyapp.android.PaintActivity" />
+        <activity android:name="net.hockeyapp.android.UpdateActivity" />
+
     </application>
 
 

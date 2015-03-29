@@ -1,11 +1,11 @@
-package freiheit.hockeylogreportinghelper;
+package freiheit.hockey.log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * read SystemLog
+ * read SystemLog using logcat
  * @see {http://developer.android.com/tools/debugging/debugging-log.html}
  */
 class LogcatReader {
