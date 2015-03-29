@@ -17,6 +17,7 @@ public class TestApplication extends android.app.Application {
 
         LogRecordingConfig config = new LogRecordingConfig.Builder()
                 .setLogLevel(Log.VERBOSE)
+                .setMaxLines(1000)
                 .clearLogBeforeRecording(false)
                 .build();
         LogRecordingManager.init(this, config);
