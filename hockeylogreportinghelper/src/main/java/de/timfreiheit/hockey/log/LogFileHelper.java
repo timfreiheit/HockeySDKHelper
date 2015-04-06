@@ -89,7 +89,7 @@ class LogFileHelper {
             return null;
         }
 
-        LinkedList<String> logLines = new LinkedList<>();
+        LinkedList<String> logLines = new LinkedList<String>();
 
         BufferedReader bufferedReader = null;
 

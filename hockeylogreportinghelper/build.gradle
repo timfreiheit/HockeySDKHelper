@@ -1,4 +1,8 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+version '0.1'
 
 android {
     compileSdkVersion 21
@@ -8,7 +12,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 21
         versionCode 1
-        versionName "0.1"
+        versionName version
     }
     buildTypes {
         release {
@@ -21,4 +25,83 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'net.hockeyapp.android:HockeySDK:3.5.0'
+}
+
+// upload tasks
+
+configurations {
+    archives {
+        extendsFrom configurations.default
+    }
+}
+
+signing {
+    required { has("release") && gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+uploadArchives {
+    configuration = configurations.archives
+    repositories.mavenDeployer {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        repository(url: smfhqNexusThirdPartyRepo) {
+            authentication(userName: smfhqNexusUser,
+                    password: smfhqNexusPassword)
+        }
+
+        pom.groupId = 'de.timfreiheit'
+        pom.artifactId = 'hockey.log'
+        pom.version = version
+
+        pom.project {
+            name 'HockeyLogReporting'
+            packaging 'aar'
+            description 'Helper to record and send the system log to hockey'
+            url 'https://github.com/timfreiheit/HockeyLogReportingHelper.git'
+
+            scm {
+                url 'scm:git@github.com:timfreiheit/HockeyLogReportingHelper.git'
+                connection 'scarchivesm:git@github.com:timfreiheit/HockeyLogReportingHelper.git'
+                developerConnection 'scm:git@github.com:timfreiheit/HockeyLogReportingHelper.git'
+            }
+
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+
+            developers {
+                developer {
+                    id 'tf'
+                    name 'Tim Freiheit'
+                    email 'freiheit.tim@gmail.com'
+                }
+            }
+        }
+    }
+
+    task androidJavadocs(type: Javadoc) {
+        source = android.sourceSets.main.java.srcDirs
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    }
+
+    task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+        classifier = 'javadoc'
+        from androidJavadocs.destinationDir
+    }
+
+    task androidSourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.sourceFiles
+    }
+
+    artifacts {
+        archives androidSourcesJar
+        archives androidJavadocsJar
+    }
+
 }
