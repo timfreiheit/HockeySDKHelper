@@ -2,8 +2,8 @@ package freiheit.testapp;
 
 import android.util.Log;
 
-import freiheit.hockey.log.LogRecordingConfig;
-import freiheit.hockey.log.LogRecordingManager;
+import de.timfreiheit.hockey.log.LogRecordingConfig;
+import de.timfreiheit.hockey.log.LogRecordingManager;
 
 /**
  *

@@ -1,4 +1,4 @@
-package freiheit.hockey.log;
+package de.timfreiheit.hockey.log;
 
 import android.app.IntentService;
 import android.content.Intent;

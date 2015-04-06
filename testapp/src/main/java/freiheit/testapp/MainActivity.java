@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 import net.hockeyapp.android.CrashManager;
 
-import freiheit.hockey.log.LogCrashManagerListener;
+import de.timfreiheit.hockey.log.LogCrashManagerListener;
 
 
 public class MainActivity extends ActionBarActivity {

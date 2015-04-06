@@ -1,12 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="freiheit.hockey">
+    package="de.timfreiheit.hockey">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
 
         <!-- the actual service to record the logs -->
-        <service android:name="freiheit.hockey.log.LogRecordingService"/>
+        <service android:name=".log.LogRecordingService"/>
 
         <!--
             just some activity declaration for hockey app

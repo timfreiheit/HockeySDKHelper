@@ -1,4 +1,4 @@
-package freiheit.hockey.utils;
+package de.timfreiheit.hockey.utils;
 
 import android.app.Activity;
 import android.app.Application;

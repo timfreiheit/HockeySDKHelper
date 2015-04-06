@@ -1,4 +1,4 @@
-package freiheit.hockey.log;
+package de.timfreiheit.hockey.log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
