@@ -15,6 +15,8 @@ Create an custom Application and override the onCreate-Method
 public void onCreate() {
     super.onCreate();
 
+    //....
+
     LogRecordingConfig config = new LogRecordingConfig.Builder()
             .setLogLevel(Log.VERBOSE)
             .setMaxLines(1000)
@@ -22,6 +24,7 @@ public void onCreate() {
             .build();
     LogRecordingManager.init(this, config);
 
+    //....
 }
 
 ```
@@ -43,3 +46,43 @@ public boolean shouldAutoUploadCrashes() {
 }
 ```
 This is not a requirement and you can override it if you want
+
+
+## Small Helper
+
+Since Api 14 it is possible to use the Application.ActivityLifecycleCallbacks to react on all activity lifecycle events.
+This Library contains an Helper to use this callbacks to check for updates, check for crashes and track the usage time
+and avoid adding code to your Activities to use Hockey.
+
+In your Application.onCreate
+
+```java
+
+@Override
+public void onCreate() {
+    super.onCreate();
+
+    //....
+    
+    HockeyLifecycleConfig lifecycleConfig = new HockeyLifecycleConfig.Builder()
+            .hockeyAppId("12345678901234567890123456789012") // your hockey app id
+            .updateEnabled(BuildConfig.DEBUG) //enable updates only on debug and disable them in release
+                // when you want to restrict the checks on specific activities
+            .activityWhereToCheckForUpdates(MainActivity.class)
+            .updateManagerListener(...) //default is null
+
+            .crashReportEnabled(true) //enable crash reporting
+                // when you want to restrict the checks on specific activities
+            .activityWhereToCheckForCrashes(MainActivity.class)
+            .crashManagerListener(...) // default is the LogCrashManagerListener
+
+            .trackingEnabled(true) //enable usage tracking
+            .build();
+    HockeyLifecycleHelper.init(this,lifecycleConfig);
+
+    //....
+
+}
+
+```
+

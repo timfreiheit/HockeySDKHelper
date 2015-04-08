@@ -4,6 +4,8 @@ import android.util.Log;
 
 import de.timfreiheit.hockey.log.LogRecordingConfig;
 import de.timfreiheit.hockey.log.LogRecordingManager;
+import de.timfreiheit.hockey.utils.HockeyLifecycleConfig;
+import de.timfreiheit.hockey.utils.HockeyLifecycleHelper;
 
 /**
  *
@@ -22,5 +24,18 @@ public class TestApplication extends android.app.Application {
                 .build();
         LogRecordingManager.init(this, config);
 
+        HockeyLifecycleConfig lifecycleConfig = new HockeyLifecycleConfig.Builder()
+                .hockeyAppId("12345678901234567890123456789012") // your hockey app id
+                .updateEnabled(BuildConfig.DEBUG) //enable updates only on debug and disable them in release
+                    // when you want to restrict the checks on specific activities
+                .activityWhereToCheckForUpdates(MainActivity.class)
+
+                .crashReportEnabled(true) //enable crash reporting
+                    // when you want to restrict the checks on specific activities
+                .activityWhereToCheckForCrashes(MainActivity.class)
+
+                .trackingEnabled(true) //enable usage tracking
+                .build();
+        HockeyLifecycleHelper.init(this,lifecycleConfig);
     }
 }

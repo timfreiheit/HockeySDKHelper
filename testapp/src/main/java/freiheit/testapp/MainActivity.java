@@ -51,10 +51,4 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        CrashManager.register(this,"12345678901234567890123456789012", new LogCrashManagerListener());
-    }
 }
