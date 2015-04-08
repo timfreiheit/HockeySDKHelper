@@ -63,7 +63,7 @@ public void onCreate() {
     super.onCreate();
 
     //....
-    
+
     HockeyLifecycleConfig lifecycleConfig = new HockeyLifecycleConfig.Builder()
             .hockeyAppId("12345678901234567890123456789012") // your hockey app id
             .updateEnabled(BuildConfig.DEBUG) //enable updates only on debug and disable them in release
