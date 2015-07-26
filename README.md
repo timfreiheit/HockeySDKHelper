@@ -5,37 +5,13 @@ At the moment this library required devices with API 15
 
 ## Integration Into Your Own App
 
-### init recording
-
-Create an custom Application and override the onCreate-Method
-
-```java
-
-@Override
-public void onCreate() {
-    super.onCreate();
-
-    //....
-
-    LogRecordingConfig config = new LogRecordingConfig.Builder()
-            .setLogLevel(Log.VERBOSE)
-            .setMaxLines(1000)
-            .clearLogBeforeRecording(false)
-            .build();
-    LogRecordingManager.init(this, config);
-
-    //....
-}
-
-```
-
 ### send the log
 
 just add the LogCrashManagerListener to the Hockey CrashManager
 
 
 ```java
-CrashManager.register(this,"some hockey id", new LogCrashManagerListener());
+CrashManager.register(this,"some hockey id", new LogCrashManagerListener(getApplicationContext(), Log.DEBUG));
 ```
 
 The LogCrashManager also overrides shouldAutoUploadCrashes
@@ -64,20 +40,24 @@ public void onCreate() {
 
     //....
 
-    HockeyLifecycleConfig lifecycleConfig = new HockeyLifecycleConfig.Builder()
-            .hockeyAppId("12345678901234567890123456789012") // your hockey app id
-            .updateEnabled(BuildConfig.DEBUG) //enable updates only on debug and disable them in release
-                // when you want to restrict the checks on specific activities
-            .activityWhereToCheckForUpdates(MainActivity.class)
-            .updateManagerListener(...) //default is null
+    HockeyLifecycleConfig lifecycleConfig = new HockeyLifecycleConfig.Builder(this)
+        // your hockey app id
+        .hockeyAppId("12345678901234567890123456789012")
 
-            .crashReportEnabled(true) //enable crash reporting
-                // when you want to restrict the checks on specific activities
-            .activityWhereToCheckForCrashes(MainActivity.class)
-            .crashManagerListener(...) // default is the LogCrashManagerListener
+        //enable updates only on debug and disable them in release
+        .updateEnabled(BuildConfig.DEBUG)
 
-            .trackingEnabled(true) //enable usage tracking
-            .build();
+        // when you want to restrict the checks on specific activities
+        .activityWhereToCheckForUpdates(MainActivity.class)
+
+        .sendLogAsCrashDescription(BuildConfig.DEBUG, Log.DEBUG)
+
+        .crashReportEnabled(true) //enable crash reporting
+        // when you want to restrict the checks on specific activities
+        .activityWhereToCheckForCrashes(MainActivity.class)
+
+        .trackingEnabled(true) //enable usage tracking
+        .build();
     HockeyLifecycleHelper.init(this,lifecycleConfig);
 
     //....

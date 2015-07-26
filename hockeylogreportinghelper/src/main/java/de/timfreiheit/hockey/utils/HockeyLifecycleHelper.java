@@ -58,7 +58,11 @@ public class HockeyLifecycleHelper implements Application.ActivityLifecycleCallb
     public void onActivityResumed(Activity activity) {
 
         if(isCrashEnabledForActivity(activity)){
-            CrashManager.register(activity, mConfig.getHockeyAppId(), mConfig.getCrashManagerListener());
+            if (mConfig.getCrashManagerListener() != null) {
+                CrashManager.register(activity, mConfig.getHockeyAppId(), mConfig.getCrashManagerListener());
+            }else {
+                CrashManager.register(activity, mConfig.getHockeyAppId());
+            }
         }
 
         if(mConfig.isTrackingEnabled()) {

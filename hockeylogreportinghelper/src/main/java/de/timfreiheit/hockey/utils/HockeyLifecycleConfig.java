@@ -1,7 +1,9 @@
 package de.timfreiheit.hockey.utils;
 
 import android.app.Activity;
+import android.app.Application;
 import android.os.Bundle;
+import android.util.Log;
 
 import net.hockeyapp.android.CrashManagerListener;
 import net.hockeyapp.android.UpdateManagerListener;
@@ -14,6 +16,8 @@ import de.timfreiheit.hockey.log.LogCrashManagerListener;
  */
 public class HockeyLifecycleConfig {
 
+    protected Application app;
+
     protected String hockeyAppId;
     protected boolean trackingEnabled = false;
     protected boolean updateEnabled = false;
@@ -22,7 +26,8 @@ public class HockeyLifecycleConfig {
     protected Class<? extends Activity> activityWhereCheckForUpdate;
 
     protected boolean crashReportEnabled = false;
-    protected CrashManagerListener crashManagerListener = new LogCrashManagerListener();
+
+    protected CrashManagerListener crashManagerListener;
     protected Class<? extends Activity> activityWhereCheckForCrashes;
 
     public String getHockeyAppId(){
@@ -57,7 +62,6 @@ public class HockeyLifecycleConfig {
         return activityWhereCheckForUpdate;
     }
 
-
     public Class<? extends Activity> getActivityWhereToCheckForCrashes(){
         return activityWhereCheckForCrashes;
     }
@@ -72,14 +76,21 @@ public class HockeyLifecycleConfig {
         private Class<? extends Activity> activityWhereCheckForUpdate;
 
         private boolean crashReportEnabled = false;
-        private CrashManagerListener crashManagerListener = new LogCrashManagerListener();
+        private CrashManagerListener crashManagerListener;
         private Class<? extends Activity> activityWhereCheckForCrashes;
+
+        private Application app;
+
+        public Builder(Application app){
+            this.app = app;
+        }
 
         /**
          * Builds configured {@link HockeyLifecycleConfig} object
          */
         public HockeyLifecycleConfig build(){
             HockeyLifecycleConfig config = new HockeyLifecycleConfig();
+            config.app = app;
             config.hockeyAppId = hockeyAppId;
             config.trackingEnabled = trackingEnabled;
             config.updateEnabled = updateEnabled;
@@ -126,6 +137,34 @@ public class HockeyLifecycleConfig {
          */
         public Builder updateDialogRequired(boolean required){
             this.updateDialogRequired = required;
+            return this;
+        }
+
+        /**
+         * send logcat output as crash description
+         * use Log.VERBOSE as logLevel
+         */
+        public Builder sendLogAsCrashDescription(boolean sendLogAsDescription){
+            return sendLogAsCrashDescription(sendLogAsDescription,Log.VERBOSE);
+        }
+
+        /**
+         * send logcat output as crash description
+         * use Log.VERBOSE as logLevel
+         */
+        public Builder sendLogAsCrashDescription(boolean sendLogAsDescription, int logLevel){
+            switch (logLevel){
+                case Log.VERBOSE:
+                case Log.DEBUG:
+                case Log.INFO:
+                case Log.WARN:
+                case Log.ERROR:
+                    this.crashManagerListener = new LogCrashManagerListener(app, logLevel);
+                    break;
+                default:
+                    this.crashManagerListener = new LogCrashManagerListener(app, Log.VERBOSE);
+                    break;
+            }
             return this;
         }
 

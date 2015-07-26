@@ -5,9 +5,6 @@
 
     <application>
 
-        <!-- the actual service to record the logs -->
-        <service android:name=".log.LogRecordingService"/>
-
         <!--
             just some activity declaration for hockey app
             avoid forgetting it on the project in which this library is used

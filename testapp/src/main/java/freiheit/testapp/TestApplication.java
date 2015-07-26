@@ -2,8 +2,6 @@ package freiheit.testapp;
 
 import android.util.Log;
 
-import de.timfreiheit.hockey.log.LogRecordingConfig;
-import de.timfreiheit.hockey.log.LogRecordingManager;
 import de.timfreiheit.hockey.utils.HockeyLifecycleConfig;
 import de.timfreiheit.hockey.utils.HockeyLifecycleHelper;
 
@@ -17,18 +15,17 @@ public class TestApplication extends android.app.Application {
     public void onCreate() {
         super.onCreate();
 
-        LogRecordingConfig config = new LogRecordingConfig.Builder()
-                .setLogLevel(Log.VERBOSE)
-                .setMaxLines(1000)
-                .clearLogBeforeRecording(false)
-                .build();
-        LogRecordingManager.init(this, config);
+        HockeyLifecycleConfig lifecycleConfig = new HockeyLifecycleConfig.Builder(this)
+                // your hockey app id
+                .hockeyAppId("12345678901234567890123456789012")
 
-        HockeyLifecycleConfig lifecycleConfig = new HockeyLifecycleConfig.Builder()
-                .hockeyAppId("12345678901234567890123456789012") // your hockey app id
-                .updateEnabled(BuildConfig.DEBUG) //enable updates only on debug and disable them in release
-                    // when you want to restrict the checks on specific activities
+                //enable updates only on debug and disable them in release
+                .updateEnabled(BuildConfig.DEBUG)
+
+                // when you want to restrict the checks on specific activities
                 .activityWhereToCheckForUpdates(MainActivity.class)
+
+                .sendLogAsCrashDescription(BuildConfig.DEBUG, Log.DEBUG)
 
                 .crashReportEnabled(true) //enable crash reporting
                     // when you want to restrict the checks on specific activities

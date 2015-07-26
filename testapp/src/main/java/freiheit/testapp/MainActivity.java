@@ -3,6 +3,7 @@ package freiheit.testapp;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -47,6 +48,8 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+
+        new LogCrashManagerListener(getApplicationContext(), Log.DEBUG);
 
         return super.onOptionsItemSelected(item);
     }
