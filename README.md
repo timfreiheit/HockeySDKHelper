@@ -1,7 +1,7 @@
 This library helps you to send the system log as an crash description to hockey app.
 
 ## Requirements
-At the moment this library required devices with API 15
+This library required devices with API 15
 
 ## Integration Into Your Own App
 
@@ -26,9 +26,8 @@ This is not a requirement and you can override it if you want
 
 ## Small Helper
 
-Since Api 14 it is possible to use the Application.ActivityLifecycleCallbacks to react on all activity lifecycle events.
 This Library contains an Helper to use this callbacks to check for updates, check for crashes and track the usage time
-and avoid adding code to your Activities to use Hockey.
+and avoid adding code to your Activities to use Hockey by using Application.ActivityLifecycleCallbacks.
 
 In your Application.onCreate
 
