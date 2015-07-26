@@ -153,6 +153,13 @@ public class HockeyLifecycleConfig {
          * use Log.VERBOSE as logLevel
          */
         public Builder sendLogAsCrashDescription(boolean sendLogAsDescription, int logLevel){
+            if (!sendLogAsDescription) {
+                //remove crashlistener if set before
+                if (crashManagerListener instanceof LogCrashManagerListener) {
+                    crashManagerListener = null;
+                }
+                return this;
+            }
             switch (logLevel){
                 case Log.VERBOSE:
                 case Log.DEBUG:
