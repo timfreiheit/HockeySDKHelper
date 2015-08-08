@@ -66,6 +66,7 @@ public class LogCrashManagerListener extends CrashManagerListener {
                     new BufferedReader(new InputStreamReader(process.getInputStream()));
 
             StringBuilder log = new StringBuilder();
+            log.append("Log: \n");
             String line;
 
             // skip all messages until messages starts form the current application process
