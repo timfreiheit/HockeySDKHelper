@@ -39,6 +39,22 @@ public class HockeyLifecycleHelper implements Application.ActivityLifecycleCallb
         }
     }
 
+    /**
+     * use {@link #init(Application, HockeyLifecycleConfig)} to create one
+     *
+     * @return the active HockeyLifecycleHelper-Singleton
+     */
+    public static HockeyLifecycleHelper getInstance(){
+        return INSTANCE;
+    }
+
+    /**
+     * @return the current config
+     */
+    public HockeyLifecycleConfig getConfig(){
+        return mConfig;
+    }
+
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         if(isUpdatedEnabledForActivity(activity)){
