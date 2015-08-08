@@ -11,7 +11,6 @@ import net.hockeyapp.android.UpdateManagerListener;
 import de.timfreiheit.hockey.log.LogCrashManagerListener;
 
 /**
- *
  * Created by timfreiheit on 08.04.15.
  */
 public class HockeyLifecycleConfig {
@@ -30,43 +29,43 @@ public class HockeyLifecycleConfig {
     protected CrashManagerListener crashManagerListener;
     protected Class<? extends Activity> activityWhereCheckForCrashes;
 
-    public String getHockeyAppId(){
+    public String getHockeyAppId() {
         return hockeyAppId;
     }
 
-    public boolean isTrackingEnabled(){
+    public boolean isTrackingEnabled() {
         return trackingEnabled;
     }
 
-    public boolean isUpdateEnabled(){
+    public boolean isUpdateEnabled() {
         return updateEnabled;
     }
 
-    public boolean isUpdateDialogRequired(){
+    public boolean isUpdateDialogRequired() {
         return updateDialogRequired;
     }
 
-    public boolean isCrashReportEnabled(){
+    public boolean isCrashReportEnabled() {
         return crashReportEnabled;
     }
 
-    public UpdateManagerListener getUpdateManagerListener(){
+    public UpdateManagerListener getUpdateManagerListener() {
         return updateManagerListener;
     }
 
-    public CrashManagerListener getCrashManagerListener(){
+    public CrashManagerListener getCrashManagerListener() {
         return crashManagerListener;
     }
 
-    public Class<? extends Activity> getActivityWhereToCheckForUpdate(){
+    public Class<? extends Activity> getActivityWhereToCheckForUpdate() {
         return activityWhereCheckForUpdate;
     }
 
-    public Class<? extends Activity> getActivityWhereToCheckForCrashes(){
+    public Class<? extends Activity> getActivityWhereToCheckForCrashes() {
         return activityWhereCheckForCrashes;
     }
 
-    public static class Builder{
+    public static class Builder {
 
         private String hockeyAppId;
         private boolean trackingEnabled = false;
@@ -81,14 +80,14 @@ public class HockeyLifecycleConfig {
 
         private Application app;
 
-        public Builder(Application app){
+        public Builder(Application app) {
             this.app = app;
         }
 
         /**
          * Builds configured {@link HockeyLifecycleConfig} object
          */
-        public HockeyLifecycleConfig build(){
+        public HockeyLifecycleConfig build() {
             HockeyLifecycleConfig config = new HockeyLifecycleConfig();
             config.app = app;
             config.hockeyAppId = hockeyAppId;
@@ -97,7 +96,11 @@ public class HockeyLifecycleConfig {
             config.updateDialogRequired = updateDialogRequired;
             config.crashReportEnabled = crashReportEnabled;
             config.updateManagerListener = updateManagerListener;
-            config.crashManagerListener = crashManagerListener;
+            if (crashManagerListener != null) {
+                config.crashManagerListener = crashManagerListener;
+            } else {
+                config.crashManagerListener = new BaseCrashManagerListener();
+            }
             config.activityWhereCheckForCrashes = activityWhereCheckForCrashes;
             config.activityWhereCheckForUpdate = activityWhereCheckForUpdate;
             return config;
@@ -108,7 +111,7 @@ public class HockeyLifecycleConfig {
          * not needed when doing this manually and only use the tracking function
          * with this helper
          */
-        public Builder hockeyAppId(String hockeyAppId){
+        public Builder hockeyAppId(String hockeyAppId) {
             this.hockeyAppId = hockeyAppId;
             return this;
         }
@@ -117,7 +120,7 @@ public class HockeyLifecycleConfig {
          * automatically track the usage time of the app
          * default is false
          */
-        public Builder trackingEnabled(boolean enabled){
+        public Builder trackingEnabled(boolean enabled) {
             this.trackingEnabled = enabled;
             return this;
         }
@@ -126,7 +129,7 @@ public class HockeyLifecycleConfig {
          * check for update on every {@link Activity#onCreate(Bundle)}
          * default is false
          */
-        public Builder updateEnabled(boolean enabled){
+        public Builder updateEnabled(boolean enabled) {
             this.updateEnabled = enabled;
             return this;
         }
@@ -135,7 +138,7 @@ public class HockeyLifecycleConfig {
          * if false, no alert dialog is shown
          * default is true
          */
-        public Builder updateDialogRequired(boolean required){
+        public Builder updateDialogRequired(boolean required) {
             this.updateDialogRequired = required;
             return this;
         }
@@ -144,15 +147,15 @@ public class HockeyLifecycleConfig {
          * send logcat output as crash description
          * use Log.VERBOSE as logLevel
          */
-        public Builder sendLogAsCrashDescription(boolean sendLogAsDescription){
-            return sendLogAsCrashDescription(sendLogAsDescription,Log.VERBOSE);
+        public Builder sendLogAsCrashDescription(boolean sendLogAsDescription) {
+            return sendLogAsCrashDescription(sendLogAsDescription, Log.VERBOSE);
         }
 
         /**
          * send logcat output as crash description
          * use Log.VERBOSE as logLevel
          */
-        public Builder sendLogAsCrashDescription(boolean sendLogAsDescription, int logLevel){
+        public Builder sendLogAsCrashDescription(boolean sendLogAsDescription, int logLevel) {
             if (!sendLogAsDescription) {
                 //remove crashlistener if set before
                 if (crashManagerListener instanceof LogCrashManagerListener) {
@@ -160,7 +163,7 @@ public class HockeyLifecycleConfig {
                 }
                 return this;
             }
-            switch (logLevel){
+            switch (logLevel) {
                 case Log.VERBOSE:
                 case Log.DEBUG:
                 case Log.INFO:
@@ -179,7 +182,7 @@ public class HockeyLifecycleConfig {
          * check and send crashed on {@link Activity#onResume()}
          * default is false
          */
-        public Builder crashReportEnabled(boolean enabled){
+        public Builder crashReportEnabled(boolean enabled) {
             this.crashReportEnabled = enabled;
             return this;
         }
@@ -187,7 +190,7 @@ public class HockeyLifecycleConfig {
         /**
          * only check for updates when an specific Activity is created
          */
-        public Builder activityWhereToCheckForUpdates(Class<? extends Activity> clazz){
+        public Builder activityWhereToCheckForUpdates(Class<? extends Activity> clazz) {
             this.activityWhereCheckForUpdate = clazz;
             return this;
         }
@@ -195,7 +198,7 @@ public class HockeyLifecycleConfig {
         /**
          * only check for crashes when an specific Activity is created
          */
-        public Builder activityWhereToCheckForCrashes(Class<? extends Activity> clazz){
+        public Builder activityWhereToCheckForCrashes(Class<? extends Activity> clazz) {
             this.activityWhereCheckForCrashes = clazz;
             return this;
         }
@@ -204,16 +207,17 @@ public class HockeyLifecycleConfig {
          * custom {@link UpdateManagerListener}
          * default is null
          */
-        public Builder updateManagerListener(UpdateManagerListener listener){
+        public Builder updateManagerListener(UpdateManagerListener listener) {
             this.updateManagerListener = listener;
             return this;
         }
 
         /**
          * custom {@link CrashManagerListener}
-         * default is {@link LogCrashManagerListener}
+         * default is {@link BaseCrashManagerListener}
+         * or {@link LogCrashManagerListener} if {@link #sendLogAsCrashDescription} is enabled
          */
-        public Builder crashManagerListener(CrashManagerListener listener){
+        public Builder crashManagerListener(CrashManagerListener listener) {
             this.crashManagerListener = listener;
             return this;
         }

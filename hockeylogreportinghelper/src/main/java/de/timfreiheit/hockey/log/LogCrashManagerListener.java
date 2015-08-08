@@ -4,24 +4,23 @@ import android.content.Context;
 import android.provider.Settings;
 import android.util.Log;
 
-import net.hockeyapp.android.CrashManagerListener;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Locale;
 
+import de.timfreiheit.hockey.utils.BaseCrashManagerListener;
+
 /**
  * reports last logfile to hockey if possible
  * Created by timfreiheit on 22.03.15.
  */
-public class LogCrashManagerListener extends CrashManagerListener {
+public class LogCrashManagerListener extends BaseCrashManagerListener {
 
     private static final String TAG = LogCrashManagerListener.class.getSimpleName();
 
     private static final String START_MESSAGE = "//----   AppStart: "+System.currentTimeMillis()+" - language: "+ Locale.getDefault().toString() +"  ----//";
 
-    private Context context;
     private int logLevel;
 
     /**
@@ -34,25 +33,10 @@ public class LogCrashManagerListener extends CrashManagerListener {
      *                 {@link Log#ERROR}}]
      */
     public LogCrashManagerListener(Context context, int loglevel){
-        this.context = context;
+        super(context);
         this.logLevel = loglevel;
 
         Log.i(TAG,START_MESSAGE);
-    }
-
-    @Override
-    public boolean shouldAutoUploadCrashes() {
-        return true;
-    }
-
-    public String getUserID() {
-        try {
-            return Settings.Secure.getString(context.getContentResolver(),
-                    Settings.Secure.ANDROID_ID);
-        }catch (Exception e){
-            // just to make sure
-            return super.getUserID();
-        }
     }
 
     @Override
