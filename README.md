@@ -14,7 +14,7 @@ just add the LogCrashManagerListener to the Hockey CrashManager
 CrashManager.register(this,"some hockey id", new LogCrashManagerListener(getApplicationContext(), Log.DEBUG));
 ```
 
-The LogCrashManager also overrides shouldAutoUploadCrashes
+The LogCrashManagerListener also overrides shouldAutoUploadCrashes
 ```java
 @Override
 public boolean shouldAutoUploadCrashes() {
@@ -23,8 +23,35 @@ public boolean shouldAutoUploadCrashes() {
 ```
 This is not a requirement and you can override it if you want
 
+## Send Exceptions as warning
 
-## Small Helper
+The WarningExceptionHandler provides a way to save Exceptions as warnings.
+
+```java
+
+WarningExceptionHandler.saveException(e, "more information about this warning");
+
+```
+
+Instead of the default:
+
+```java
+
+ExceptionHandler.saveException(e, listener);
+
+```
+
+All WarningExceptionHandler.saveException calls will run in an seperate Thread to avoid blocking the app.
+The difference is that the WarningExceptionHandler will use all settings defined in your HockeyLifecycleHelper.
+Warnings are shown at the HockeyApp-Website as:
+
+WARNING: java.lang.RuntimeException: some reason
+instead of
+WARNING: java.lang.RuntimeException: some reason
+
+This make it easier to distinguish between the two.
+
+## HockeyLifecycleHelper
 
 This Library contains an Helper to use this callbacks to check for updates, check for crashes and track the usage time
 and avoid adding code to your Activities to use Hockey by using Application.ActivityLifecycleCallbacks.
