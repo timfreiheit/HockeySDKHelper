@@ -92,3 +92,17 @@ public void onCreate() {
 
 ```
 
+## Install
+
+```groovy
+
+repositories {    
+    // ...    
+    maven { url "https://jitpack.io" }   
+}   
+
+dependencies {    
+    compile 'com.github.timfreiheit:HockeyLogReportingHelper:v0.4'    
+}   
+
+```
