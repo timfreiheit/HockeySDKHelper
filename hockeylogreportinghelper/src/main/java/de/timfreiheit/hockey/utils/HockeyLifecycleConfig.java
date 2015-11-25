@@ -8,14 +8,13 @@ import android.util.Log;
 import net.hockeyapp.android.CrashManagerListener;
 import net.hockeyapp.android.UpdateManagerListener;
 
-import de.timfreiheit.hockey.log.LogCrashManagerListener;
+import de.timfreiheit.hockey.listeners.BaseCrashManagerListener;
+import de.timfreiheit.hockey.listeners.LogCrashManagerListener;
 
 /**
  * Created by timfreiheit on 08.04.15.
  */
 public class HockeyLifecycleConfig {
-
-    protected Application app;
 
     protected String hockeyAppId;
     protected boolean trackingEnabled = false;
@@ -78,18 +77,11 @@ public class HockeyLifecycleConfig {
         private CrashManagerListener crashManagerListener;
         private Class<? extends Activity> activityWhereCheckForCrashes;
 
-        private Application app;
-
-        public Builder(Application app) {
-            this.app = app;
-        }
-
         /**
          * Builds configured {@link HockeyLifecycleConfig} object
          */
         public HockeyLifecycleConfig build() {
             HockeyLifecycleConfig config = new HockeyLifecycleConfig();
-            config.app = app;
             config.hockeyAppId = hockeyAppId;
             config.trackingEnabled = trackingEnabled;
             config.updateEnabled = updateEnabled;
@@ -144,41 +136,6 @@ public class HockeyLifecycleConfig {
         }
 
         /**
-         * send logcat output as crash description
-         * use Log.VERBOSE as logLevel
-         */
-        public Builder sendLogAsCrashDescription(boolean sendLogAsDescription) {
-            return sendLogAsCrashDescription(sendLogAsDescription, Log.VERBOSE);
-        }
-
-        /**
-         * send logcat output as crash description
-         * use Log.VERBOSE as logLevel
-         */
-        public Builder sendLogAsCrashDescription(boolean sendLogAsDescription, int logLevel) {
-            if (!sendLogAsDescription) {
-                //remove crashlistener if set before
-                if (crashManagerListener instanceof LogCrashManagerListener) {
-                    crashManagerListener = null;
-                }
-                return this;
-            }
-            switch (logLevel) {
-                case Log.VERBOSE:
-                case Log.DEBUG:
-                case Log.INFO:
-                case Log.WARN:
-                case Log.ERROR:
-                    this.crashManagerListener = new LogCrashManagerListener(app, logLevel);
-                    break;
-                default:
-                    this.crashManagerListener = new LogCrashManagerListener(app, Log.VERBOSE);
-                    break;
-            }
-            return this;
-        }
-
-        /**
          * check and send crashed on {@link Activity#onResume()}
          * default is false
          */
@@ -214,8 +171,6 @@ public class HockeyLifecycleConfig {
 
         /**
          * custom {@link CrashManagerListener}
-         * default is {@link BaseCrashManagerListener}
-         * or {@link LogCrashManagerListener} if {@link #sendLogAsCrashDescription} is enabled
          */
         public Builder crashManagerListener(CrashManagerListener listener) {
             this.crashManagerListener = listener;

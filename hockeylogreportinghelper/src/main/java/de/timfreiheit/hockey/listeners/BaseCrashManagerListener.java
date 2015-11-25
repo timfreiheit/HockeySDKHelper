@@ -1,5 +1,6 @@
-package de.timfreiheit.hockey.utils;
+package de.timfreiheit.hockey.listeners;
 
+import android.app.Application;
 import android.content.Context;
 import android.provider.Settings;
 
@@ -17,7 +18,14 @@ public class BaseCrashManagerListener extends CrashManagerListener{
 
     }
 
+    /**
+     * the context is needed to read the ANDROID_ID as USER_ID
+     * @param context Context
+     */
     public BaseCrashManagerListener(Context context){
+        if (context != null && !(context instanceof Application)) {
+            context = context.getApplicationContext();
+        }
         mContext = context;
     }
 

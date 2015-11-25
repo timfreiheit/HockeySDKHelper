@@ -1,15 +1,12 @@
-package de.timfreiheit.hockey.log;
+package de.timfreiheit.hockey.listeners;
 
 import android.content.Context;
-import android.provider.Settings;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Locale;
-
-import de.timfreiheit.hockey.utils.BaseCrashManagerListener;
 
 /**
  * reports last logfile to hockey if possible
@@ -22,6 +19,14 @@ public class LogCrashManagerListener extends BaseCrashManagerListener {
     private static final String START_MESSAGE = "//----   AppStart: "+System.currentTimeMillis()+" - language: "+ Locale.getDefault().toString() +"  ----//";
 
     private int logLevel;
+
+    public LogCrashManagerListener(){
+        this(null);
+    }
+
+    public LogCrashManagerListener(Context context){
+        this(context, Log.VERBOSE);
+    }
 
     /**
      *
@@ -36,7 +41,7 @@ public class LogCrashManagerListener extends BaseCrashManagerListener {
         super(context);
         this.logLevel = loglevel;
 
-        Log.i(TAG,START_MESSAGE);
+        Log.i(TAG, START_MESSAGE);
     }
 
     @Override
@@ -50,7 +55,6 @@ public class LogCrashManagerListener extends BaseCrashManagerListener {
                     new BufferedReader(new InputStreamReader(process.getInputStream()));
 
             StringBuilder log = new StringBuilder();
-            log.append("Log: \n");
             String line;
 
             // skip all messages until messages starts form the current application process
@@ -69,6 +73,7 @@ public class LogCrashManagerListener extends BaseCrashManagerListener {
 
                 log.append(line);
                 log.append(System.getProperty("line.separator"));
+
             }
             bufferedReader.close();
 
@@ -80,7 +85,6 @@ public class LogCrashManagerListener extends BaseCrashManagerListener {
 
         return description;
     }
-
 
     private String[] logcatParamsFromConfig(){
 
