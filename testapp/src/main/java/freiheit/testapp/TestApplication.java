@@ -33,8 +33,9 @@ public class TestApplication extends android.app.Application {
                 .crashReportEnabled(true) //enable crash reporting
                     // when you want to restrict the checks on specific activities
                 .activityWhereToCheckForCrashes(MainActivity.class)
-
-                .trackingEnabled(true) //enable usage tracking
+                //enable usage tracking and metrics
+                .metricsEnabled(true)
+                .trackingEnabled(true)
                 .build();
         HockeyLifecycleHelper.init(this,lifecycleConfig);
     }

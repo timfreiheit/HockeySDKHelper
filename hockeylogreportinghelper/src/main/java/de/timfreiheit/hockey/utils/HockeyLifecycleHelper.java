@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.Tracking;
 import net.hockeyapp.android.UpdateManager;
+import net.hockeyapp.android.metrics.MetricsManager;
 
 /**
  *
@@ -36,6 +37,9 @@ public class HockeyLifecycleHelper implements Application.ActivityLifecycleCallb
         if(INSTANCE == null){
             INSTANCE = new HockeyLifecycleHelper(config);
             app.registerActivityLifecycleCallbacks(INSTANCE);
+            if (config.isMetricsEnabled()) {
+                MetricsManager.register(app, app, config.getHockeyAppId());
+            }
         }
     }
 

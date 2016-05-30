@@ -55,7 +55,9 @@ This make it easier to distinguish between the two.
 
 This Library contains an Helper to use this callbacks to check for updates, check for crashes and track the usage time
 and avoid adding code to your Activities to use Hockey by using Application.ActivityLifecycleCallbacks.
-
+     
+The CombinedDescriptionListener can be used to collect and different information of the app.
+    
 In your Application.onCreate
 
 ```java
@@ -66,24 +68,27 @@ public void onCreate() {
 
     //....
 
-    HockeyLifecycleConfig lifecycleConfig = new HockeyLifecycleConfig.Builder(this)
-        // your hockey app id
-        .hockeyAppId("12345678901234567890123456789012")
+    CombinedDescriptionListener crashManagerListener = new CombinedDescriptionListener(this)
+                    .addPart("Memory", new MemoryInfoCrashManagerListener())
+                    .addPart("Log", new LogCrashManagerListener());
+    
+    HockeyLifecycleConfig lifecycleConfig = new HockeyLifecycleConfig.Builder()
+            // your hockey app id
+            .hockeyAppId("12345678901234567890123456789012")
+            //enable updates only on debug and disable them in release
+            .updateEnabled(BuildConfig.DEBUG)
 
-        //enable updates only on debug and disable them in release
-        .updateEnabled(BuildConfig.DEBUG)
-
-        // when you want to restrict the checks on specific activities
-        .activityWhereToCheckForUpdates(MainActivity.class)
-
-        .sendLogAsCrashDescription(BuildConfig.DEBUG, Log.DEBUG)
-
-        .crashReportEnabled(true) //enable crash reporting
-        // when you want to restrict the checks on specific activities
-        .activityWhereToCheckForCrashes(MainActivity.class)
-
-        .trackingEnabled(true) //enable usage tracking
-        .build();
+            // when you want to restrict the checks on specific activities
+            .activityWhereToCheckForUpdates(MainActivity.class)
+    
+            .crashManagerListener(crashManagerListener)
+            .crashReportEnabled(true) //enable crash reporting
+            // when you want to restrict the checks on specific activities
+            .activityWhereToCheckForCrashes(MainActivity.class)
+            //enable usage tracking and metrics
+            .metricsEnabled(true)
+            .trackingEnabled(true)
+            .build();
     HockeyLifecycleHelper.init(this,lifecycleConfig);
 
     //....
@@ -102,7 +107,7 @@ repositories {
 }   
 
 dependencies {    
-    compile 'com.github.timfreiheit:HockeyLogReportingHelper:v0.4'    
+    compile 'com.github.timfreiheit:HockeyLogReportingHelper:v0.5'    
 }   
 
 ```
