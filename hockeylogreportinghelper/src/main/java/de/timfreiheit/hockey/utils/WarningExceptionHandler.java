@@ -65,7 +65,11 @@ public class WarningExceptionHandler {
         ExceptionHandler.saveException(exception, null, new CrashManagerListener() {
             @Override
             public String getDescription() {
-                return "Information:\n" + info + "\n\n" + listener.getDescription();
+                final String infoText = "Information:\n" + info;
+                if (listener == null) {
+                    return infoText;
+                }
+                return infoText + "\n\n" + listener.getDescription();
             }
         });
     }
