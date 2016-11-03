@@ -107,7 +107,7 @@ repositories {
 }   
 
 dependencies {    
-    compile 'com.github.timfreiheit:HockeyLogReportingHelper:XXX'    
+    compile 'com.github.timfreiheit:HockeyLogReportingHelper:vXXX'
 }   
 
 ```
