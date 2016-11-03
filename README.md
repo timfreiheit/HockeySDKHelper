@@ -1,55 +1,15 @@
-This library helps you to send the system log as an crash description to hockey app.
+This library provides helpers for the [HockeySDK-Android](https://github.com/bitstadium/HockeySDK-Android)
+
+- easily setup
+- better crash description management
+    - send system log
+    - send memory stats
+    - support custom description fields
 
 ## Requirements
 This library required devices with API 15
 
 ## Integration Into Your Own App
-
-### send the log
-
-just add the LogCrashManagerListener to the Hockey CrashManager
-
-
-```java
-CrashManager.register(this,"some hockey id", new LogCrashManagerListener(getApplicationContext(), Log.DEBUG));
-```
-
-The LogCrashManagerListener also overrides shouldAutoUploadCrashes
-```java
-@Override
-public boolean shouldAutoUploadCrashes() {
-    return true;
-}
-```
-This is not a requirement and you can override it if you want
-
-## Send Exceptions as warning
-
-The WarningExceptionHandler provides a way to save Exceptions as warnings.
-
-```java
-
-WarningExceptionHandler.saveException(e, "more information about this warning");
-
-```
-
-Instead of the default:
-
-```java
-
-ExceptionHandler.saveException(e, listener);
-
-```
-
-All WarningExceptionHandler.saveException calls will run in an seperate Thread to avoid blocking the app.
-The difference is that the WarningExceptionHandler will use all settings defined in your HockeyLifecycleHelper.
-Warnings are shown at the HockeyApp-Website as:
-
-WARNING: java.lang.RuntimeException: some reason
-instead of
-WARNING: java.lang.RuntimeException: some reason
-
-This make it easier to distinguish between the two.
 
 ## HockeyLifecycleHelper
 
@@ -97,6 +57,42 @@ public void onCreate() {
 
 ```
 
+
+## Send Exceptions as warning
+
+The WarningExceptionHandler provides a way to save Exceptions as warnings.
+
+```java
+
+WarningExceptionHandler.saveException(e, "more information about this warning");
+
+```
+
+Instead of the default:
+
+```java
+
+ExceptionHandler.saveException(e, listener);
+
+```
+
+All WarningExceptionHandler.saveException calls will run in an seperate Thread to avoid blocking the app.
+The difference is that the WarningExceptionHandler will use all settings defined in your HockeyLifecycleHelper.
+Warnings are shown at the HockeyApp-Website as:
+
+```java 
+WARNING: java.lang.RuntimeException: some reason
+```
+
+instead of`
+
+```java
+java.lang.RuntimeException: some reason
+``
+
+This make it easier to distinguish between the two.
+
+
 ## Install
 
 ```groovy
@@ -107,7 +103,7 @@ repositories {
 }   
 
 dependencies {    
-    compile 'com.github.timfreiheit:HockeyLogReportingHelper:vXXX'
+    compile 'com.github.timfreiheit:HockeySDKHelper:vXXX'
 }   
 
 ```
