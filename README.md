@@ -88,7 +88,7 @@ instead of
 
 ```java
 java.lang.RuntimeException: some reason
-``
+```
 
 This make it easier to distinguish between the two.
 
