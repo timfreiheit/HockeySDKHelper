@@ -84,7 +84,7 @@ Warnings are shown at the HockeyApp-Website as:
 WARNING: java.lang.RuntimeException: some reason
 ```
 
-instead of`
+instead of
 
 ```java
 java.lang.RuntimeException: some reason
