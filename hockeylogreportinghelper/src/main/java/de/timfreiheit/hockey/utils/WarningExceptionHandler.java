@@ -3,6 +3,10 @@ package de.timfreiheit.hockey.utils;
 import net.hockeyapp.android.CrashManagerListener;
 import net.hockeyapp.android.ExceptionHandler;
 
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+
 /**
  * save an exception as a warning.
  * a warning is an exception which to not crash the app but should be notified by someone to fix it
@@ -62,7 +66,7 @@ public class WarningExceptionHandler {
      * @param info      some information to display before all other crash description
      */
     private static void saveExceptionSync(Throwable exception, final CrashManagerListener listener, final String info) {
-        ExceptionHandler.saveException(exception, null, new CrashManagerListener() {
+        ExceptionHandler.saveException(new WarningException(exception), null, new CrashManagerListener() {
             @Override
             public String getDescription() {
                 final String infoText = "Information:\n" + info;
@@ -72,6 +76,44 @@ public class WarningExceptionHandler {
                 return infoText + "\n\n" + listener.getDescription();
             }
         });
+    }
+
+    /**
+     * exception wrapper which helps indicating that this exception was not a crash
+     */
+    private static class WarningException extends Exception {
+
+        private Throwable throwable;
+
+        WarningException(Throwable throwable) {
+            this.throwable = throwable;
+        }
+
+        @Override
+        public String toString() {
+            return "WARNING: " +  throwable.toString();
+        }
+
+        @Override
+        public void printStackTrace() {
+            throwable.printStackTrace();
+        }
+
+        @Override
+        public void printStackTrace(PrintStream err) {
+            try {
+                err.write("WARNING: ".getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            throwable.printStackTrace(err);
+        }
+
+        @Override
+        public void printStackTrace(PrintWriter err) {
+            err.write("WARNING: ");
+            throwable.printStackTrace(err);
+        }
     }
 
 }
