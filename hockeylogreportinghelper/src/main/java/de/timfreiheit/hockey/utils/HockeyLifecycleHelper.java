@@ -38,7 +38,7 @@ public class HockeyLifecycleHelper implements Application.ActivityLifecycleCallb
             INSTANCE = new HockeyLifecycleHelper(config);
             app.registerActivityLifecycleCallbacks(INSTANCE);
             if (config.isMetricsEnabled()) {
-                MetricsManager.register(app, app, config.getHockeyAppId());
+                MetricsManager.register(app, config.getHockeyAppId());
             }
         }
     }
@@ -125,8 +125,8 @@ public class HockeyLifecycleHelper implements Application.ActivityLifecycleCallb
         if(activity == null) {
             return false;
         }
-        Class<? extends Activity> clazz = mConfig.getActivityWhereToCheckForUpdate();
-        return mConfig.isUpdateEnabled() && (clazz == null || clazz.isInstance(activity));
+        boolean matches = mConfig.getActivityWhereToCheckForUpdate().apply(activity);
+        return mConfig.isUpdateEnabled() && matches;
     }
 
     /**
@@ -136,8 +136,8 @@ public class HockeyLifecycleHelper implements Application.ActivityLifecycleCallb
         if(activity == null) {
             return false;
         }
-        Class<? extends Activity> clazz = mConfig.getActivityWhereToCheckForCrashes();
-        return mConfig.isCrashReportEnabled() && (clazz == null || clazz.isInstance(activity));
+        boolean matches = mConfig.getActivityWhereToCheckForCrashes().apply(activity);
+        return mConfig.isCrashReportEnabled() && matches;
     }
 
 }

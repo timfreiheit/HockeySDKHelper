@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
 import net.hockeyapp.android.CrashManagerListener;
 import net.hockeyapp.android.UpdateManagerListener;
 import net.hockeyapp.android.metrics.MetricsManager;
 
 import de.timfreiheit.hockey.listeners.BaseCrashManagerListener;
-import de.timfreiheit.hockey.listeners.LogCrashManagerListener;
 
 public class HockeyLifecycleConfig {
 
@@ -22,12 +20,12 @@ public class HockeyLifecycleConfig {
 
     protected boolean updateDialogRequired = true;
     protected UpdateManagerListener updateManagerListener;
-    protected Class<? extends Activity> activityWhereCheckForUpdate;
+    protected Predicate<Activity> activityWhereCheckForUpdate;
 
     protected boolean crashReportEnabled = false;
 
     protected CrashManagerListener crashManagerListener;
-    protected Class<? extends Activity> activityWhereCheckForCrashes;
+    protected Predicate<Activity> activityWhereCheckForCrashes;
 
     public String getHockeyAppId() {
         return hockeyAppId;
@@ -61,11 +59,11 @@ public class HockeyLifecycleConfig {
         return crashManagerListener;
     }
 
-    public Class<? extends Activity> getActivityWhereToCheckForUpdate() {
+    public Predicate<Activity> getActivityWhereToCheckForUpdate() {
         return activityWhereCheckForUpdate;
     }
 
-    public Class<? extends Activity> getActivityWhereToCheckForCrashes() {
+    public Predicate<Activity> getActivityWhereToCheckForCrashes() {
         return activityWhereCheckForCrashes;
     }
 
@@ -77,11 +75,11 @@ public class HockeyLifecycleConfig {
         private boolean updateDialogRequired = true;
         private boolean metricsEnabled = false;
         private UpdateManagerListener updateManagerListener;
-        private Class<? extends Activity> activityWhereCheckForUpdate;
+        private Predicate<Activity> activityWhereCheckForUpdate = Predicates.TRUE();
 
         private boolean crashReportEnabled = false;
         private CrashManagerListener crashManagerListener;
-        private Class<? extends Activity> activityWhereCheckForCrashes;
+        private Predicate<Activity> activityWhereCheckForCrashes = Predicates.TRUE();
 
         /**
          * Builds configured {@link HockeyLifecycleConfig} object
@@ -162,18 +160,43 @@ public class HockeyLifecycleConfig {
         /**
          * only check for updates when an specific Activity is created
          */
-        public Builder activityWhereToCheckForUpdates(Class<? extends Activity> clazz) {
-            this.activityWhereCheckForUpdate = clazz;
+        public Builder activityWhereToCheckForUpdates(final Class<? extends Activity> clazz) {
+            return activityWhereToCheckForUpdates(new Predicate<Activity>() {
+                @Override
+                public boolean apply(Activity activity) {
+                    return clazz == null || clazz.isInstance(activity);
+                }
+            });
+        }
+
+        /**
+         * only check for updates when an specific Activity is created
+         */
+        public Builder activityWhereToCheckForUpdates(Predicate<Activity> predicate) {
+            this.activityWhereCheckForUpdate = predicate;
             return this;
         }
 
         /**
          * only check for crashes when an specific Activity is created
          */
-        public Builder activityWhereToCheckForCrashes(Class<? extends Activity> clazz) {
-            this.activityWhereCheckForCrashes = clazz;
+        public Builder activityWhereToCheckForCrashes(final Class<? extends Activity> clazz) {
+            return activityWhereToCheckForCrashes(new Predicate<Activity>() {
+                @Override
+                public boolean apply(Activity activity) {
+                    return clazz == null || clazz.isInstance(activity);
+                }
+            });
+        }
+
+        /**
+         * only check for crashes when an specific Activity is created
+         */
+        public Builder activityWhereToCheckForCrashes(Predicate<Activity> predicate) {
+            this.activityWhereCheckForCrashes = predicate;
             return this;
         }
+
 
         /**
          * custom {@link UpdateManagerListener}
