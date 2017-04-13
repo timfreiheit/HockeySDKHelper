@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
+import de.timfreiheit.hockey.listeners.WrappedCrashManagerListener;
+
 /**
  * save an exception as a warning.
  * a warning is an exception which to not crash the app but should be notified by someone to fix it
@@ -66,10 +68,10 @@ public class WarningExceptionHandler {
      * @param info      some information to display before all other crash description
      */
     private static void saveExceptionSync(Throwable exception, final CrashManagerListener listener, final String info) {
-        ExceptionHandler.saveException(new WarningException(exception), null, new CrashManagerListener() {
+        ExceptionHandler.saveException(new WarningException(exception), null, new WrappedCrashManagerListener(listener) {
             @Override
             public String getDescription() {
-                final String infoText = "Information:\n" + info;
+                final String infoText = "Warning Information:\n" + info;
                 if (listener == null) {
                     return infoText;
                 }
