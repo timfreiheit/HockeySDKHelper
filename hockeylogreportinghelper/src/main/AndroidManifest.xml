@@ -3,17 +3,4 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <application>
-
-        <!--
-            just some activity declaration for hockey app
-            avoid forgetting it on the project in which this library is used
-        -->
-        <activity android:name="net.hockeyapp.android.FeedbackActivity" />
-        <activity android:name="net.hockeyapp.android.PaintActivity" />
-        <activity android:name="net.hockeyapp.android.UpdateActivity" />
-
-    </application>
-
-
 </manifest>

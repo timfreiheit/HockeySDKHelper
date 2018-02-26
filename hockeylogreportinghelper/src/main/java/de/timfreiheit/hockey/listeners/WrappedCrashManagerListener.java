@@ -70,11 +70,12 @@ public class WrappedCrashManagerListener extends CrashManagerListener {
     }
 
     @Override
-    public boolean onCrashesFound() {
+    public void onNoCrashesFound() {
         if (wrapped == null) {
-            return super.onCrashesFound();
+            super.onNoCrashesFound();
+            return;
         }
-        return wrapped.onCrashesFound();
+        wrapped.onNoCrashesFound();
     }
 
     @Override
