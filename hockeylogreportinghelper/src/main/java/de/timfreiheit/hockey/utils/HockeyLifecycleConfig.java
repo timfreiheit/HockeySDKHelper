@@ -6,6 +6,10 @@ import android.content.Context;
 import android.os.Bundle;
 
 import net.hockeyapp.android.CrashManagerListener;
+import net.hockeyapp.android.FeedbackActivity;
+import net.hockeyapp.android.LoginActivity;
+import net.hockeyapp.android.PaintActivity;
+import net.hockeyapp.android.UpdateActivity;
 import net.hockeyapp.android.UpdateManagerListener;
 import net.hockeyapp.android.metrics.MetricsManager;
 
@@ -75,11 +79,21 @@ public class HockeyLifecycleConfig {
         private boolean updateDialogRequired = true;
         private boolean metricsEnabled = false;
         private UpdateManagerListener updateManagerListener;
-        private Predicate<Activity> activityWhereCheckForUpdate = Predicates.TRUE();
+        private Predicate<Activity> activityWhereCheckForUpdate = new Predicate<Activity>() {
+            @Override
+            public boolean apply(Activity activity) {
+                return !isHockeyActivity(activity);
+            }
+        };
 
         private boolean crashReportEnabled = false;
         private CrashManagerListener crashManagerListener;
-        private Predicate<Activity> activityWhereCheckForCrashes = Predicates.TRUE();
+        private Predicate<Activity> activityWhereCheckForCrashes = new Predicate<Activity>() {
+            @Override
+            public boolean apply(Activity activity) {
+                return !isHockeyActivity(activity);
+            }
+        };
 
         /**
          * Builds configured {@link HockeyLifecycleConfig} object
@@ -132,7 +146,7 @@ public class HockeyLifecycleConfig {
         }
 
         /**
-         * @see @{@link MetricsManager#register(Context, Application)}
+         * @see @{@link MetricsManager#register(Application, String)}
          */
         public Builder metricsEnabled(boolean metricsEnabled) {
             this.metricsEnabled = metricsEnabled;
@@ -172,9 +186,21 @@ public class HockeyLifecycleConfig {
         /**
          * only check for updates when an specific Activity is created
          */
-        public Builder activityWhereToCheckForUpdates(Predicate<Activity> predicate) {
-            this.activityWhereCheckForUpdate = predicate;
+        public Builder activityWhereToCheckForUpdates(final Predicate<Activity> predicate) {
+            this.activityWhereCheckForUpdate = new Predicate<Activity>() {
+                @Override
+                public boolean apply(Activity activity) {
+                    return !isHockeyActivity(activity) && (predicate == null || predicate.apply(activity));
+                }
+            };
             return this;
+        }
+
+        private static boolean isHockeyActivity(Activity activity) {
+            return activity.getClass() == UpdateActivity.class
+                    || activity.getClass() == FeedbackActivity.class
+                    || activity.getClass() == PaintActivity.class
+                    || activity.getClass() == LoginActivity.class;
         }
 
         /**
@@ -192,8 +218,13 @@ public class HockeyLifecycleConfig {
         /**
          * only check for crashes when an specific Activity is created
          */
-        public Builder activityWhereToCheckForCrashes(Predicate<Activity> predicate) {
-            this.activityWhereCheckForCrashes = predicate;
+        public Builder activityWhereToCheckForCrashes(final Predicate<Activity> predicate) {
+            this.activityWhereCheckForCrashes = new Predicate<Activity>() {
+                @Override
+                public boolean apply(Activity activity) {
+                    return !isHockeyActivity(activity) && (predicate == null || predicate.apply(activity));
+                }
+            };
             return this;
         }
 

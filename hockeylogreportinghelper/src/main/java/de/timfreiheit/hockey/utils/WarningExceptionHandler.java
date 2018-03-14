@@ -18,7 +18,7 @@ import de.timfreiheit.hockey.listeners.WrappedCrashManagerListener;
 public class WarningExceptionHandler {
 
     /**
-     * @see {@link #saveException(Throwable, String)}
+     * @see #saveException(Throwable, String)
      */
     public static void saveException(Throwable e) {
         saveException(e, "");
@@ -39,7 +39,7 @@ public class WarningExceptionHandler {
     }
 
     /**
-     * @see {@link #saveException(Throwable, CrashManagerListener, String)}
+     * @see #saveException(Throwable, CrashManagerListener, String)
      */
     public static void saveException(Throwable e, CrashManagerListener listener) {
         saveException(e, listener, null);
